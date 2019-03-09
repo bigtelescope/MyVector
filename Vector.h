@@ -28,7 +28,7 @@ class MyVector
 		int 			size;
 		MyType *		data;
 		std::fstream 	file;
-		string str;
+		std::string str;
 
 	public:
 		MyVector		();
