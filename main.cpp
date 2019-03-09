@@ -1,12 +1,19 @@
 #include "Vector.h"
 
+using namespace std;
+
 int main()
 {
+	std::fstream file;
+	file.open("Report.txt", fstream::out);
+	file << "hello man\n\n";
+	file.close();
 	MyVector v1(3);
-	std::cin >> v1;
-	v1.~MyVector();
-	std::cout << "v1[0] = " << v1[0] << std::endl;
-	std::cout << "v1[1] = " << v1[1] << std::endl;
-	std::cout << "v1[2] = " << v1[2] << std::endl;
+	cin >> v1;
+	MyVector v3(v1);
+	v3.~MyVector();
+	cout << "v1[0] = " << v3[0] << endl;
+	cout << "v1[1] = " << v3[1] << endl;
+	cout << "v1[2] = " << v3[2] << endl;
 	return 0;
 }

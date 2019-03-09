@@ -1,3 +1,15 @@
+/*
+-------------------QUESTIONS--------------
+
+1) 	Если в классе есть указатель на файл, как лучше 
+	его инициализировать в конструкторе?
+
+2)	Можно ли как-нибудь узнать номер строки
+	вызова без передачи аргумента __ЛАЙН__ 
+	в конструкторе?
+
+*/
+
 #ifndef VECTOR_H_
 #define VECTOR_H_
 
@@ -5,14 +17,18 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <fstream>
+#include <cstring>
 
 typedef double MyType;
 
 class MyVector
 {
 	private:
-		int 		size;
-		MyType *	data;
+		int 			size;
+		MyType *		data;
+		std::fstream 	file;
+		string str;
 
 	public:
 		MyVector		();
@@ -30,7 +46,6 @@ class MyVector
 		MyVector 				operator/	(MyType number);
 		MyType &				operator[]	(int index);
 		void *					operator new(size_t, void * ptr);
-		//void 					operator delete[] (int, void *);
 
 		void					Show		(const MyVector & V);	
 		void 					VSwap		(MyVector & V);

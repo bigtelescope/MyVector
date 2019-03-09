@@ -1,19 +1,21 @@
 #include "Vector.h"
 
-std::istream& operator>>(std::istream & stream, MyVector & V)
+using namespace std;
+
+istream& operator>>(istream & stream, MyVector & V)
 {
 	for(int i = 0; i < V.size; i++)
-		std::cin >> V.data[i];
+		cin >> V.data[i];
 
 	return stream;
 }
 
-std::ostream & operator<<(std::ostream & stream, MyVector & V)
+ostream & operator<<(ostream & stream, MyVector & V)
 {
-	std::cout << "(";
+	cout << "(";
 	for(int i = 0; i < V.size - 1; i++)
-		std::cout << V.data[i] << ", ";
-	std::cout << V.data[V.size - 1] << ") ";
+		cout << V.data[i] << ", ";
+	cout << V.data[V.size - 1] << ") ";
 
 	return stream;
 }
@@ -27,7 +29,7 @@ MyVector & MyVector::operator=(const MyVector & V)
 {
 	MyVector copy(V);
 	VSwap(copy);
-	std::cout << "assignment operator =" << std::endl;
+	cout << "assignment operator =" << endl;
 
 	return(*this);
 }
@@ -97,44 +99,68 @@ void * MyVector::operator new(size_t, void * ptr)
 MyVector::MyVector() :
 	size 	(0),
 	data	(nullptr)
-{std::cout << "default constructor, data = " << data << std::endl;}
+{
+	file.open("Report.txt", fstream::app);
+	file << "[Default constuctor] ";
+	file << ": line = " << __LINE__;
+	file << ", data = " << data << endl << endl;
+	file.close();
+}
 
 MyVector::MyVector(int init_size) :
 	size	(init_size),
 	data	(new MyType(init_size))
-{std::cout << "size constructor, data = " << data << std::endl;}
+{
+	file.open("Report.txt", fstream::app);
+	file << "[Size constuctor] ";
+	file << ": line = " << __LINE__;
+	file << ", data = " << data << endl << endl;
+	file.close();
+}
 
 MyVector::MyVector(const MyVector& vector) :
 	size 	(vector.size),
 	data	(new MyType[vector.size])
 {
+	file.open("Report.txt", fstream::app);
+	file << "[Copying constuctor] ";
+	file << ": line = " << __LINE__;
+	file << ", data = " << data << endl << endl;
+	file.close();
+
 	for(int i = 0; i < vector.size; i++)
 		data[i] = vector.data[i];
-	std::cout << "vector constructor, data = " << data << std::endl;
 }
 
 MyVector::~MyVector()
 {
-	std::cout << "DESTROOOOOOOOOY, data = " << data << std::endl;;
+	file.open("Report.txt", fstream::app);
+	file << "[Destuctor] ";
+	file << ": line = " << __LINE__;
+	file << ", data = " << data << endl << endl;
+	file.close();
+
 	if(data != nullptr)
+	{
 		delete [] data;
+	}
 }
 
 void MyVector::Show(const MyVector & V)
 {
 	if(size)
 	{
-		std::cout << "(";
+		cout << "(";
 		for(int i = 0; i < size - 1; i++)
-			std::cout << data[i] << ", ";
-		std::cout << data[size -1] << ") " << std::endl;
+			cout << data[i] << ", ";
+		cout << data[size -1] << ") " << endl;
 	}
 }
 
 void MyVector::VSwap(MyVector & V)
 {
-	std::swap(size, V.size);
-	std::swap(data, V.data);
+	swap(size, V.size);
+	swap(data, V.data);
 }
 
 MyType & MyVector::Element(int index)
