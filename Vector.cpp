@@ -20,27 +20,36 @@ ostream & operator<<(ostream & stream, MyVector & V)
 	return stream;
 }
 
+const MyType & MyVector::operator[](int index) const
+{
+	return this->data[index];
+}
+
 MyType & MyVector::operator[](int index)
 {
-	return Element(index);
+	return data[index];
 }
 
 MyVector & MyVector::operator=(const MyVector & V)
 {
 	MyVector copy(V);
 	VSwap(copy);
-	cout << "assignment operator =" << endl;
 
 	return(*this);
+}
+
+MyVector & MyVector::operator=(MyVector && rhs)
+{
+	VSwap(rhs);
 }
 
 MyVector MyVector::operator+(const MyVector & rhs)
 {
 	assert(this->size == rhs.size);
 
-	MyVector v1(rhs.size);
+	MyVector v1(rhs);
 	for(int i(0); i < rhs.size; i++)
-		v1.data[i] = rhs.data[i] + this->data[i];
+		v1.data[i] += rhs.data[i];
 
 	return v1;
 }
@@ -85,61 +94,31 @@ MyVector operator*(MyType number, const MyVector & V)
 	return v1;
 }
 
-void * MyVector::operator new(size_t, void * ptr)
-{
-	return ptr;
-}
-
-/*void MyVector::operator delete[] (int _size, void * ptr)
-{
-	for(int i(0); i < _size - 1; i++)
-		delete (ptr + i*sizeof(MyType));
-}*/
-
 MyVector::MyVector() :
 	size 	(0),
 	data	(nullptr)
-{
-	file.open("Report.txt", fstream::app);
-	file << "[Default constuctor] ";
-	file << ": line = " << __LINE__;
-	file << ", data = " << data << endl << endl;
-	file.close();
-}
+{}
 
 MyVector::MyVector(int init_size) :
 	size	(init_size),
-	data	(new MyType(init_size))
-{
-	file.open("Report.txt", fstream::app);
-	file << "[Size constuctor] ";
-	file << ": line = " << __LINE__;
-	file << ", data = " << data << endl << endl;
-	file.close();
-}
+	data	(new MyType[init_size])
+{}
 
 MyVector::MyVector(const MyVector& vector) :
 	size 	(vector.size),
 	data	(new MyType[vector.size])
 {
-	file.open("Report.txt", fstream::app);
-	file << "[Copying constuctor] ";
-	file << ": line = " << __LINE__;
-	file << ", data = " << data << endl << endl;
-	file.close();
-
 	for(int i = 0; i < vector.size; i++)
 		data[i] = vector.data[i];
 }
 
+MyVector::MyVector(MyVector && vector)
+{
+	VSwap(vector);
+}
+
 MyVector::~MyVector()
 {
-	file.open("Report.txt", fstream::app);
-	file << "[Destuctor] ";
-	file << ": line = " << __LINE__;
-	file << ", data = " << data << endl << endl;
-	file.close();
-
 	if(data != nullptr)
 	{
 		delete [] data;
@@ -161,10 +140,4 @@ void MyVector::VSwap(MyVector & V)
 {
 	swap(size, V.size);
 	swap(data, V.data);
-}
-
-MyType & MyVector::Element(int index)
-{
-	assert(0 <= index && index < this->size);
-	return this->data[index];
 }
